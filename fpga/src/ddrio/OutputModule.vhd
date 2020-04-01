@@ -57,7 +57,7 @@ architecture RTL_Pipelined of OutputModule is
 	signal synch_oe: std_logic;
 	signal synch_D: signed(7 downto 0);
 	signal synch_DQS: std_logic;
-	signal tmp_DQS: std_logic_vector(0 to DQS_DELAY+1);
+	signal tmp_DQS: std_logic_vector(0 to DQS_DELAY);
 
 begin
 	-- D Flip Flop to synchronize OE with data
@@ -84,7 +84,7 @@ begin
 		port map(sysclk, en, rst, '0', DQS, synch_DQS);
 	tmp_DQS(0) <= synch_DQS;
 	-- Delay flipflops
-	gen_dqs_ffs: for i in 0 to DQS_DELAY generate
+	gen_dqs_ffs: for i in 0 to DQS_DELAY-1 generate
 		comp_dqs_ff_i: FlipFlopD
 			-- These flipflops are always enabled since they only serve as a
 			-- delay
@@ -92,7 +92,7 @@ begin
 	end generate;
 	-- Put tri state driver on DQS output as well
 	comp_dqs_tsd: TriStateDriver
-		port map (tmp_DQS(DQS_DELAY + 1), synch_oe, DDR_DQS);
+		port map (tmp_DQS(DQS_DELAY), synch_oe, DDR_DQS);
 end architecture RTL_Pipelined;
 
 
