@@ -1,7 +1,1 @@
-# Ignore everything
-**
-# Not gitignore
-!.gitignore
 
-# Except .vhd files
-!*.vhd
